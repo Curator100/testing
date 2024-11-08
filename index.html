@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marvel-Themed Exam</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Bebas Neue', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            text-align: center;
+        }
+        .question, .result {
+            margin: 10px 0;
+        }
+        button {
+            background-color: orange;
+            color: yellow;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+        input[type="number"] {
+            width: 200px;
+            padding: 10px;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Marvel-Themed Exam</h1>
+    <div class="roll-input">
+        <label for="roll">Enter Your Roll Number:</label><br>
+        <input type="number" id="roll" name="roll" required>
+    </div>
+    <div id="quiz">
+        <div class="question">
+            <p>1. What is the synonym of 'quick'?</p>
+            <input type="radio" name="q1" value="a"> Fast<br>
+            <input type="radio" name="q1" value="b"> Slow<br>
+            <input type="radio" name="q1" value="c"> Lazy<br>
+        </div>
+        <div class="question">
+            <p>2. What is the antonym of 'happy'?</p>
+            <input type="radio" name="q2" value="a"> Sad<br>
+            <input type="radio" name="q2" value="b"> Joyful<br>
+            <input type="radio" name="q2" value="c"> Excited<br>
+        </div>
+        <div class="question">
+            <p>3. Choose the correct spelling:</p>
+            <input type="radio" name="q3" value="a"> Recomend<br>
+            <input type="radio" name="q3" value="b"> Recommend<br>
+            <input type="radio" name="q3" value="c"> Recommed<br>
+        </div>
+    </div>
+    <button onclick="submitExam()">Submit Exam</button>
+    <div id="result" class="result"></div>
+    <script>
+        async function submitExam() {
+            const roll = document.getElementById('roll').value;
+            const answers = {
+                q1: document.querySelector('input[name="q1"]:checked')?.value,
+                q2: document.querySelector('input[name="q2"]:checked')?.value,
+                q3: document.querySelector('input[name="q3"]:checked')?.value,
+            };
+
+            const response = await fetch('https://your-heroku-app.herokuapp.com/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ roll, answers })
+            });
+            const result = await response.json();
+            document.getElementById('result').innerText = `You scored ${result.score} out of 3!`;
+        }
+    </script>
+</body>
+</html>
